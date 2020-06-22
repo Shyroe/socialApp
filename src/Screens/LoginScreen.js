@@ -3,7 +3,7 @@ import styled from "styled-components/native";
 import Text from "../styles/typography";
 import * as firebase from "firebase";
 
-export default () => {
+export default ({ navigation }) => {
   const [formLogin, setFormLogin] = useState({
     email: "",
     password: "",
@@ -68,7 +68,7 @@ export default () => {
       <ButtonSignIn onPress={handleLogin}>
         <Text color="#fff">Sign in</Text>
       </ButtonSignIn>
-      <ButtonMsgSignUp>
+      <ButtonMsgSignUp onPress={() => navigation.navigate("Register")}>
         <Text color="#414959">
           New to SocialApp ?{" "}
           <Text bold color="#e9446a">
