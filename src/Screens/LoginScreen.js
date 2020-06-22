@@ -1,8 +1,22 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components/native";
 import Text from "../styles/typography";
+import * as firebase from "firebase";
 
 export default () => {
+  const [formLogin, setFormLogin] = useState({
+    email: "",
+    password: "",
+  });
+  const [errorMessage, setErrorMessage] = useState(null);
+
+  function handleLogin() {
+    const { email, password } = formLogin;
+    firebase
+      .auth()
+      .signInWithEmailAndPassword(email, password)
+      .catch((error) => setErrorMessage(error.message));
+  }
   return (
     <Container>
       <Header>
@@ -11,23 +25,47 @@ export default () => {
         </Text>
       </Header>
       <WrapperError>
-        <Text>Error</Text>
+        {errorMessage && (
+          <Text bold color="#e9446a">
+            {" "}
+            {errorMessage}{" "}
+          </Text>
+        )}
       </WrapperError>
       <WrapperForm>
         <FieldGroup>
           <Text medium color="#8A8F9E" bold>
             Email Address
           </Text>
-          <Input autoCapitalize="none"></Input>
+          <Input
+            onChangeText={(email) =>
+              setFormLogin({
+                ...formLogin,
+                email,
+              })
+            }
+            value={formLogin.email}
+            autoCapitalize="none"
+          ></Input>
         </FieldGroup>
         <FieldGroup style={{ marginTop: 30 }}>
           <Text color="#8A8F9E" medium bold>
             Password
           </Text>
-          <Input secureTextEntry autoCapitalize="none"></Input>
+          <Input
+            onChangeText={(password) =>
+              setFormLogin({
+                ...formLogin,
+                password,
+              })
+            }
+            value={formLogin.password}
+            secureTextEntry
+            autoCapitalize="none"
+          ></Input>
         </FieldGroup>
       </WrapperForm>
-      <ButtonSignIn>
+      <ButtonSignIn onPress={handleLogin}>
         <Text color="#fff">Sign in</Text>
       </ButtonSignIn>
       <ButtonMsgSignUp>
